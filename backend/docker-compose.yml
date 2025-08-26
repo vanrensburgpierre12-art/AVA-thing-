@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: simdeviceplatform_postgres
+    environment:
+      POSTGRES_DB: simdeviceplatform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Data/Scripts:/docker-entrypoint-initdb.d
+    networks:
+      - simdeviceplatform_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: simdeviceplatform_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - simdeviceplatform_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  simdeviceplatform_network:
+    driver: bridge
